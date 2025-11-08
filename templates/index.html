@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Mobilization Network</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-map-marker-alt"></i> Community Mobilization Network -- OCS</h1>
+            <p class="subtitle">Manage and verify community organizations</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Sidebar - Filters -->
+            <aside class="sidebar-left">
+                <div class="filter-section">
+                    <h3><i class="fas fa-filter"></i> Filters</h3>
+                    
+                    <div class="filter-group" style="margin-bottom:20px;">
+                        <label style="display:block; font-weight:600; margin-bottom:8px;">Search Organizations</label>
+                        <input type="text" id="search-input" placeholder="Search by name, address, county..." 
+                               style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-family:'Times New Roman', Times, serif;"
+                               oninput="applySearch(this.value)">
+                    </div>
+                    
+                    <div class="filter-group" style="margin-bottom:20px;">
+                        <label style="display:block; font-weight:600; margin-bottom:8px;">Status Filter</label>
+                        <select id="status-filter" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;" onchange="applyStatusFilter(this.value)">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed--yes">Confirmed--Yes</option>
+                            <option value="confirmed--no">Confirmed--No</option>
+                            <option value="in-process">In Process</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="select-all">
+                            <span><strong>Select All Counties</strong></span>
+                        </label>
+                    </div>
+
+                    <div id="category-filters" class="filter-list">
+                        <!-- Counties will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="download-section" style="margin-bottom: 20px;">
+                    <a href="/api/export.csv" class="btn btn-primary" style="display:block; width:100%; text-align:center; font-family:'Times New Roman', Times, serif; background:#5c5dbd; color:white; font-weight:600; padding:12px 0; border-radius:8px; box-shadow:0 2px 8px rgba(40,60,120,0.04); text-decoration:none; transition: background 0.18s, color 0.18s;">
+                        <i class="fas fa-download"></i> Download Latest Dataset (CSV)
+                    </a>
+                </div>
+
+                <div class="stats-section">
+                    <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
+                    <div class="stat-item">
+                        <span>Total Organizations:</span>
+                        <strong id="total-orgs">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>With Location:</span>
+                        <strong id="with-location">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Without Location:</span>
+                        <strong id="without-location">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Pending:</span>
+                        <strong id="pending-count">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Confirmed--Yes:</span>
+                        <strong id="confirmed-yes-count">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Confirmed--No:</span>
+                        <strong id="confirmed-no-count">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>In Process:</span>
+                        <strong id="in-process-count">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Other:</span>
+                        <strong id="other-count">0</strong>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center - Map -->
+            <main class="map-container">
+                <div id="map" class="map"></div>
+            </main>
+
+            <!-- Right Sidebar - Organizations without locations -->
+            <aside class="sidebar-right">
+                <div class="no-location-section">
+                    <h3><i class="fas fa-map"></i> Organizations Without Location</h3>
+                    <p class="help-text">These organizations need address information or do not provide on-site services</p>
+                    <div id="no-location-list" class="org-list">
+                        <!-- Organizations without locations will be populated here -->
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Organization Details Modal -->
+    <div id="org-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Comment Modal -->
+    <div id="comment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Note for Organization</h2>
+            <div id="comment-org-info"></div>
+            <form id="comment-form">
+                <textarea id="comment-text" rows="4" placeholder="Enter your notes here..."></textarea>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeCommentModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveComment()">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+

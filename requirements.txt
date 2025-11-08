@@ -1,0 +1,9 @@
+pip>=24.2
+setuptools>=68
+wheel>=0.41
+numpy==2.3.4
+pandas==2.2.3
+Flask==3.0.0
+folium==0.14.0
+gunicorn==21.2.0
+requests==2.32.3
